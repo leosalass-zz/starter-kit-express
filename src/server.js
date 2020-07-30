@@ -23,7 +23,7 @@ app.use(session({
 
 //Routes
 app.use(require('./routes/api.js'));
-app.use(require('./routes/auth.js'));
+app.use(require('./routes/user.js'));
 
 //Static Files
 app.use(express.static(path.join(__dirname, 'public')));
