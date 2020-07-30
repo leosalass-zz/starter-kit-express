@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path')
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv').config();
+const session = require('express-session');
+
 
 //Initializations
 const app = express();
@@ -12,7 +13,11 @@ app.set('App', path.join(__dirname, 'app'))
 
 //Middlewares
 app.use(express.urlencoded({extended: false}))
-
+app.use(session({
+  secret: 'secret',
+  resave: true,
+  saveUninitialized: true,
+}))
 //Global Variables
 
 //Routes
@@ -21,5 +26,5 @@ app.use(express.urlencoded({extended: false}))
 
 //Server is listening
 app.listen(app.get('port'), () => {
-  console.log(`Server listening on port ${app.get('port')} ${process.env.NODE_ENV}`);
+  console.log(`Server listening on port:${app.get('port')} Mode:${process.env.NODE_ENV}`);
 })
