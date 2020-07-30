@@ -21,6 +21,8 @@ app.use(session({
 //Global Variables
 
 //Routes
+app.use(require('./routes/api.js'));
+app.use(require('./routes/auth.js'));
 
 //Static Files
 

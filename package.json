@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "node src/server.js"
+    "dev": "node src/server.js",
+    "nodemon": "nodemon src/server.js"
   },
   "author": "Leonardo Salas",
   "license": "ISC",
