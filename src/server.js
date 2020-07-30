@@ -25,7 +25,7 @@ app.use(require('./routes/api.js'));
 app.use(require('./routes/auth.js'));
 
 //Static Files
-
+app.use(express.static(path.join(__dirname, 'public')))
 //Server is listening
 app.listen(app.get('port'), () => {
   console.log(`Server listening on port:${app.get('port')} Mode:${process.env.NODE_ENV}`);
