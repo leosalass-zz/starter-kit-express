@@ -1,8 +1,3 @@
-const express = require('express')
-const router = express.Router()
+const Route = require('../app/middlewares/RouteMiddleware');
 
-router.get('/', (req, res) => {  
-  res.send('Index')
-});
-
-module.exports = router
+Route.get('/users/get', 'users/UserController.get', {middlewares:['logger']});
