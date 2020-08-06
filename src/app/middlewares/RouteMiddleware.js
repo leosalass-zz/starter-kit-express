@@ -6,7 +6,7 @@ const router = express.Router()
 var loadedControllers = []
 var controllers = {}
 
-function httpGet(uri, target, extra = { middlewares: []}){
+function httpGet(uri, target, extra = { middlewares: [], request: undefined}){
   route('get', uri, target, extra)
 }
 function httpPost(uri, target, extra = { middlewares: []}){
@@ -19,7 +19,7 @@ function httpDelete(uri, target, extra = { middlewares: []}){
   route('delete', uri, target, extra)
 }
 
-function route(httpMethod = 'get', uri, target, extra = { middlewares: []}){    
+function route(httpMethod = 'get', uri, target, extra){    
     try{
       for(let midIndex = 0; midIndex < extra.middlewares.length; midIndex++){
         const midName = extra.middlewares[midIndex]
@@ -30,6 +30,10 @@ function route(httpMethod = 'get', uri, target, extra = { middlewares: []}){
         }
       }
     }catch(err){}
+
+    if(extra.request != undefined){
+      console.log('not defined')
+    }
     
     const data = target.split('.');
     const pathToController = `../controllers/${data[0]}`;
@@ -51,8 +55,6 @@ function route(httpMethod = 'get', uri, target, extra = { middlewares: []}){
 }
 
 function logger(req, res, next){
-  console.log('logger')
-  console.log(req.method)
   next();
 }
 

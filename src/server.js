@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path')
 const dotenv = require('dotenv').config();
 const session = require('express-session');
+const validator = require('validatorjs')
 
 //Initializations
 const app = express();
@@ -28,7 +29,7 @@ global.__basedir = __dirname;
 global.__App = path.join(__basedir, 'app')
 global.__Controllers = path.join(__App, 'controllers')
 global.__Models = path.join(__App, 'models')
-
+global.Validator = validator
 //Routes
 require('./routes/api.js');
 const { router } = require('./app/middlewares/RouteMiddleware.js')
