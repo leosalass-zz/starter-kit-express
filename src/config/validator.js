@@ -11,9 +11,8 @@ Validator.registerAsync('available', function(value, attribute, req, passes) {
   
   var Model = mongoose.model(modelName);
   
-  Model.find({[field]: value }, function (err, docs) {    
-    console.log(docs.length)
-    if(docs.length > 0){
+  Model.findOne({[field]: value }, function (err, docs) {
+    if(docs != null){
       passes(false, `${field} has already been taken.`); 
     }
     passes();
