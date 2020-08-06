@@ -26,10 +26,15 @@ app.use(function (req, res, next) {
 
 //Global Variables
 global.__basedir = __dirname;
+global.__Config = path.join(__basedir, 'config')
 global.__App = path.join(__basedir, 'app')
 global.__Controllers = path.join(__App, 'controllers')
 global.__Models = path.join(__App, 'models')
 global.Validator = validator
+
+//Validator Config
+require(`${__Config}/validator.js`);
+
 //Routes
 require('./routes/api.js');
 const { router } = require('./app/middlewares/RouteMiddleware.js')
