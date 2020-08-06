@@ -2,19 +2,37 @@ const User = require(`${__Models}/User`);
 var controller = {};
 
 controller.get = function(req, res){
-  //let validation = new Validator
+  data = {username: 'Leonardo Fabio Salas Sarmiento'}
+  rules = {username: 'available:User.name'}
+  let validator = new Validator(data, rules);
+  
+  function passes() {
+    // Validation passed
+  }
+  
+  function fails() {
+    console.log(validator.errors);
+  }
+  
+  validator.checkAsync(passes, fails);
+  res.send('getting the users')
+};
+
+controller.store = function(req, res){
   const data = req.body
   const rules = {
-    name: 'required',
-    email: 'required|email',
-    age: 'min:18'
+    name: 'required'
   };
+
   const validation = new Validator(data, rules);
 
-  console.log(validation.passes())
-  console.log(validation.errors)
-  User.get(req)
-  res.send('Listando los usuarios..')
-};
+  if(validation.fails()){
+    res.json(validation.errors)
+    return
+  }
+
+  User.store(data)
+  res.send('ok')
+}
 
 module.exports = controller

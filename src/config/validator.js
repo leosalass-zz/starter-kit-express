@@ -1,10 +1,22 @@
 /// FOR MORE INFORMATION: https://github.com/skaterdav85/validatorjs
 
-
+const mongoose = require('mongoose');
 //TODO: make this custom rule to work with mongoose
-Validator.registerAsync('username_available', function(username, attribute, req, passes) {
-  // do your database/api checks here etc
-  // then call the `passes` method where appropriate:
-  passes(); // if username is available
-  passes(false, 'Username has already been taken.'); // if username is not available
+Validator.registerAsync('available', function(value, attribute, req, passes) {
+  console.log('------------------------')
+
+  attribute = attribute.split('.')
+  const modelName = attribute[0]
+  const field = attribute[1]
+  
+  var Model = mongoose.model(modelName);
+  
+  Model.find({[field]: value }, function (err, docs) {    
+    console.log(docs.length)
+    if(docs.length > 0){
+      passes(false, `${field} has already been taken.`); 
+    }
+    passes();
+  });
+   
 });

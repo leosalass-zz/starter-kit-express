@@ -8,11 +8,24 @@ const UserSchema = new Schema({
   updated_at: { type: Date, default: null },
 });
 
-User.store = function(req){
-  console.log('storing the user')
+mongoose.model('User', UserSchema)
+var Model = mongoose.model('User');
+
+User.store = function(data){
+  var instance = new Model();
+  instance.name = data.name;
+  instance.save(function (err) {
+    console.log(err)
+    return false;
+  });
+  return true;
 }
 
 User.get = function(req){
+  Model.find({ 'name': 'Leonardo Fabio Salas Sarmiento' }, function (err, docs) {
+    // docs is an array
+    console.log(docs)
+  });
   console.log('users list in MODEL')
 }
 
