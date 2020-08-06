@@ -7,19 +7,19 @@ var loadedControllers = []
 var controllers = {}
 
 function httpGet(uri, target, extra = { middlewares: []}){
-  route('get', uri, target, extra = { middlewares: []})
+  route('get', uri, target, extra)
 }
 function httpPost(uri, target, extra = { middlewares: []}){
-  route('post', uri, target, extra = { middlewares: []})
+  route('post', uri, target, extra)
 }
 function httpPut(uri, target, extra = { middlewares: []}){
-  route('put', uri, target, extra = { middlewares: []})
+  route('put', uri, target, extra)
 }
 function httpDelete(uri, target, extra = { middlewares: []}){
-  route('delete', uri, target, extra = { middlewares: []})
+  route('delete', uri, target, extra)
 }
 
-function route(httpMethod, uri, target, extra = { middlewares: []}){    
+function route(httpMethod = 'get', uri, target, extra = { middlewares: []}){    
     try{
       for(let midIndex = 0; midIndex < extra.middlewares.length; midIndex++){
         const midName = extra.middlewares[midIndex]

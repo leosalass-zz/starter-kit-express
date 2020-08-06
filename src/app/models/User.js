@@ -14,7 +14,6 @@ User.store = function(req){
 
 User.get = function(req){
   console.log('users list in MODEL')
-  console.log(req.method)
 }
 
 module.exports = User
