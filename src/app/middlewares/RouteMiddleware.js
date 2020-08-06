@@ -1,11 +1,25 @@
+//** https://nodejs.org/api/http.html#http_http_methods **//
+
 const express = require('express')
 const app = express()
 const router = express.Router()
 var loadedControllers = []
 var controllers = {}
 
+function httpGet(uri, target, extra = { middlewares: []}){
+  route('get', uri, target, extra = { middlewares: []})
+}
+function httpPost(uri, target, extra = { middlewares: []}){
+  route('post', uri, target, extra = { middlewares: []})
+}
+function httpPut(uri, target, extra = { middlewares: []}){
+  route('put', uri, target, extra = { middlewares: []})
+}
+function httpDelete(uri, target, extra = { middlewares: []}){
+  route('delete', uri, target, extra = { middlewares: []})
+}
 
-function get(uri, target, extra = { middlewares: []}){    
+function route(httpMethod, uri, target, extra = { middlewares: []}){    
     try{
       for(let midIndex = 0; midIndex < extra.middlewares.length; midIndex++){
         const midName = extra.middlewares[midIndex]
@@ -32,7 +46,7 @@ function get(uri, target, extra = { middlewares: []}){
     }
 
     try{
-      router.get(uri, controller[method]);
+      router[httpMethod](uri, controller[method]);
     }catch(err){}
 }
 
@@ -43,6 +57,9 @@ function logger(req, res, next){
 }
 
 module.exports = {
-  get: get,
+  get: httpGet,
+  post: httpPost,
+  put: httpPut,
+  delete: httpDelete,
   router
 }
