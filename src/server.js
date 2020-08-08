@@ -30,15 +30,24 @@ global.__Config = path.join(__basedir, 'config')
 global.__App = path.join(__basedir, 'app')
 global.__Controllers = path.join(__App, 'controllers')
 global.__Models = path.join(__App, 'models')
+global.__Routes = path.join(__basedir, 'routes')
 global.Validator = validator
 
 //Validator Config
 require(`${__Config}/validator.js`);
 
 //Routes
-require('./routes/api.js');
+const routesFolder = __Routes;
+const fs = require('fs');
+fs.readdir(routesFolder, (err, files) => {
+  files.forEach(file => {
+    console.log(file);
+    require(`${__Routes}\\${file}`);
+  });
+});
+
 const { router } = require('./app/middlewares/RouteMiddleware.js')
-app.use('/api', router);
+app.use(router);
 
 //Static Files
 app.use(express.static(path.join(__dirname, 'public')));

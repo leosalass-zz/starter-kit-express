@@ -7,15 +7,44 @@ var loadedControllers = []
 var controllers = {}
 
 function httpGet(uri, target, extra = { middlewares: [], request: undefined}){
+  var err = new Error();
+  Error.prepareStackTrace = function (err, stack) { return stack; };  
+  currentfile = err.stack.shift().getFileName();
+  callerfile = err.stack.shift().getFileName();
+  callerfile = /routes(.+)/.exec(callerfile)[1]
+  callerfile = callerfile.replace('.js', '')
+  callerfile = callerfile.substr(1)
   route('get', uri, target, extra)
 }
-function httpPost(uri, target, extra = { middlewares: []}){
-  route('post', uri, target, extra)
+function httpPost(uri, target, extra = { middlewares: [], request: undefined}){
+  var err = new Error();
+  Error.prepareStackTrace = function (err, stack) { return stack; };  
+  currentfile = err.stack.shift().getFileName();
+  callerfile = err.stack.shift().getFileName();
+  callerfile = /routes(.+)/.exec(callerfile)[1]
+  callerfile = callerfile.replace('.js', '')
+  callerfile = callerfile.substr(1)
+  
+  route('post', `/${callerfile}${uri}`, target, extra)
 }
-function httpPut(uri, target, extra = { middlewares: []}){
+function httpPut(uri, target, extra = { middlewares: [], request: undefined}){
+  var err = new Error();
+  Error.prepareStackTrace = function (err, stack) { return stack; };  
+  currentfile = err.stack.shift().getFileName();
+  callerfile = err.stack.shift().getFileName();
+  callerfile = /routes(.+)/.exec(callerfile)[1]
+  callerfile = callerfile.replace('.js', '')
+  callerfile = callerfile.substr(1)
   route('put', uri, target, extra)
 }
-function httpDelete(uri, target, extra = { middlewares: []}){
+function httpDelete(uri, target, extra = { middlewares: [], request: undefined}){
+  var err = new Error();
+  Error.prepareStackTrace = function (err, stack) { return stack; };  
+  currentfile = err.stack.shift().getFileName();
+  callerfile = err.stack.shift().getFileName();
+  callerfile = /routes(.+)/.exec(callerfile)[1]
+  callerfile = callerfile.replace('.js', '')
+  callerfile = callerfile.substr(1)
   route('delete', uri, target, extra)
 }
 
