@@ -109,10 +109,6 @@ function setControllersMiddleware(req, res, next){
   next();
 }
 
-function logger(req, res, next){
-  next();
-}
-
 module.exports = {
   get: httpGet,
   post: httpPost,
