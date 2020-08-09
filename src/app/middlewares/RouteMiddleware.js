@@ -101,6 +101,7 @@ function setControllersMiddleware(req, res, next){
     const index = `${req.method.toLowerCase()}${req.baseUrl}`
     if(controllersMiddlewares[index] != undefined){     
       const config = controllersMiddlewares[index] 
+      console.log(config)
       if(requires[index] != undefined){
         requires[index](req, res, next)
       }
