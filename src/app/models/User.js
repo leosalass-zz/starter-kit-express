@@ -4,6 +4,8 @@ const User = {}
 
 const UserSchema = new Schema({
   name: { type: String, required: true},
+  ip_address: { type: String, default: null },
+  last_login: { type: Date, default: null },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: null },
 });
@@ -11,11 +13,14 @@ const UserSchema = new Schema({
 mongoose.model('User', UserSchema)
 var Model = mongoose.model('User');
 
-User.store = function(data){
+User.store = function(req){
+  const data = req.body
+  const ip_address = req.connection.remoteAddress
+  console.log(ip_address)
   var instance = new Model();
   instance.name = data.name;
+  instance.ip_address = ip_address
   instance.save(function (err) {
-    console.log(err)
     return false;
   });
   return true;

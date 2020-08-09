@@ -21,8 +21,8 @@ controller.get = function(req, res){
   res.send('getting the users')
 };
 
-controller.store = function(req, res){
-  //User.store(data)
+controller.store = function(req, res){  
+  User.store(req)
   res.send('store')
 }
 
