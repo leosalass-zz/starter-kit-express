@@ -52,19 +52,21 @@ function httpDelete(uri, target, extra = { middlewares: [], request: undefined }
 }
 
 function route(httpMethod = 'get', uri, target, extra) {
+  uri = `/api/v1${uri}`
   try {
     if (extra.request != undefined) {
       const data = { method: httpMethod, baseUrl: uri, request: extra.request }
       const index = `${httpMethod}${uri}`
       controllersMiddlewares[index] = data
       requires[index] = require(`${__Request}\\${extra.request}.js`)
+      console.log(uri)
       router.use(uri, setControllersMiddleware)
     }
   } catch (err) {
     console.log(err)
   }
 
-  try {
+  /*try {
     for (let midIndex = 0; midIndex < extra.middlewares.length; midIndex++) {
       const midName = extra.middlewares[midIndex]
       switch (midName) {
@@ -74,7 +76,7 @@ function route(httpMethod = 'get', uri, target, extra) {
       }
 
     }
-  } catch (err) { }
+  } catch (err) { }*/
 
   const data = target.split('.');
   const pathToController = `../controllers/${data[0]}`;
