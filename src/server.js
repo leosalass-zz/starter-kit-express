@@ -20,17 +20,20 @@ app.use(session({
   saveUninitialized: true,
 }));
 app.use(function (req, res, next) {
-  console.log('Time:', Date.now());
+  //console.log('Time:', Date.now());
   next();
 });
 
 //Global Variables
 global.__basedir = __dirname;
 global.__Config = path.join(__basedir, 'config')
-global.__App = path.join(__basedir, 'app')
-global.__Controllers = path.join(__App, 'controllers')
-global.__Models = path.join(__App, 'models')
 global.__Routes = path.join(__basedir, 'routes')
+global.__App = path.join(__basedir, 'app')
+global.__Models = path.join(__App, 'models')
+global.__Controllers = path.join(__App, 'controllers')
+global.__Request = path.join(__App, 'request')
+global.__Middlewares = path.join(__App, 'middlewares')
+global.__RouteMiddleware = path.join(__Middlewares, 'RouteMiddleware')
 global.Validator = validator
 
 //Validator Config
@@ -41,7 +44,6 @@ const routesFolder = __Routes;
 const fs = require('fs');
 fs.readdir(routesFolder, (err, files) => {
   files.forEach(file => {
-    console.log(file);
     require(`${__Routes}\\${file}`);
   });
 });

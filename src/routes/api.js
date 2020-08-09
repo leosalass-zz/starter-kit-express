@@ -1,7 +1,6 @@
-const Route = require('../app/middlewares/RouteMiddleware');
+const Route = require(__RouteMiddleware);
 
-
-Route.get('/users', 'users/UserController.get', {middlewares:['logger'], request: 'UserStoreRequest'});
-Route.post('/users', 'users/UserController.store');
-Route.put('/users/list', 'users/UserController.get');
-Route.delete('/users/list', 'users/UserController.get');
+Route.get('/users', 'users/UserController.get');
+Route.post('/users', 'users/UserController.store', {middlewares:['logger'], request: 'UserStoreRequest'});
+Route.put('/users', 'users/UserController.update');
+Route.delete('/users', 'users/UserController.destroy');

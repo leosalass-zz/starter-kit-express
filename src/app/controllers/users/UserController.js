@@ -2,6 +2,9 @@ const User = require(`${__Models}/User`);
 var controller = {};
 
 controller.get = function(req, res){
+  res.send('get controller')
+  return
+
   data = {username: 'Leonardo Fabio Salas Sarmiento'}
   rules = {username: 'available:User.name'}
   let validator = new Validator(data, rules);
@@ -19,20 +22,18 @@ controller.get = function(req, res){
 };
 
 controller.store = function(req, res){
-  const data = req.body
-  const rules = {
-    name: 'required'
-  };
+  //User.store(data)
+  res.send('store')
+}
 
-  const validation = new Validator(data, rules);
+controller.update = function(req, res){
+  //User.store(data)
+  res.send('update')
+}
 
-  if(validation.fails()){
-    res.json(validation.errors)
-    return
-  }
-
-  User.store(data)
-  res.send('ok')
+controller.destroy = function(req, res){
+  //User.store(data)
+  res.send('destroy')
 }
 
 module.exports = controller

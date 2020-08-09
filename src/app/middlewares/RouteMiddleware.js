@@ -1,10 +1,13 @@
 //** https://nodejs.org/api/http.html#http_http_methods **//
 
 const express = require('express')
+const { request } = require('express')
 const app = express()
 const router = express.Router()
 var loadedControllers = []
 var controllers = {}
+var controllersMiddlewares = []
+var requires = []
 
 function httpGet(uri, target, extra = { middlewares: [], request: undefined}){
   var err = new Error();
@@ -14,7 +17,7 @@ function httpGet(uri, target, extra = { middlewares: [], request: undefined}){
   callerfile = /routes(.+)/.exec(callerfile)[1]
   callerfile = callerfile.replace('.js', '')
   callerfile = callerfile.substr(1)
-  route('get', uri, target, extra)
+  route('get', `/${callerfile}${uri}`, target, extra)
 }
 function httpPost(uri, target, extra = { middlewares: [], request: undefined}){
   var err = new Error();
@@ -35,7 +38,7 @@ function httpPut(uri, target, extra = { middlewares: [], request: undefined}){
   callerfile = /routes(.+)/.exec(callerfile)[1]
   callerfile = callerfile.replace('.js', '')
   callerfile = callerfile.substr(1)
-  route('put', uri, target, extra)
+  route('put', `/${callerfile}${uri}`, target, extra)
 }
 function httpDelete(uri, target, extra = { middlewares: [], request: undefined}){
   var err = new Error();
@@ -45,10 +48,23 @@ function httpDelete(uri, target, extra = { middlewares: [], request: undefined})
   callerfile = /routes(.+)/.exec(callerfile)[1]
   callerfile = callerfile.replace('.js', '')
   callerfile = callerfile.substr(1)
-  route('delete', uri, target, extra)
+  route('delete', `/${callerfile}${uri}`, target, extra)
 }
 
-function route(httpMethod = 'get', uri, target, extra){    
+function route(httpMethod = 'get', uri, target, extra){  
+  try{      
+    if(extra.request != undefined){
+        const data  = {method: httpMethod, baseUrl: uri, request: extra.request}
+        const index = `${httpMethod}${uri}`
+        controllersMiddlewares[index] = data
+        requires[index] = require(`${__Request}\\${extra.request}.js`)
+        router.use(uri, setControllersMiddleware)
+      }
+    }catch(err){
+      console.log(err)
+    }  
+
+    
     try{
       for(let midIndex = 0; midIndex < extra.middlewares.length; midIndex++){
         const midName = extra.middlewares[midIndex]
@@ -57,12 +73,9 @@ function route(httpMethod = 'get', uri, target, extra){
             router.use(uri, logger)
             break;
         }
-      }
-    }catch(err){}
 
-    if(extra.request != undefined){
-      console.log('not defined')
-    }
+      }
+    }catch(err){}   
     
     const data = target.split('.');
     const pathToController = `../controllers/${data[0]}`;
@@ -81,6 +94,19 @@ function route(httpMethod = 'get', uri, target, extra){
     try{
       router[httpMethod](uri, controller[method]);
     }catch(err){}
+}
+
+function setControllersMiddleware(req, res, next){
+  try{
+    const index = `${req.method.toLowerCase()}${req.baseUrl}`
+    if(controllersMiddlewares[index] != undefined){     
+      const config = controllersMiddlewares[index] 
+      if(requires[index] != undefined){
+        requires[index](req, res, next)
+      }
+    }
+  }catch(err){}
+  next();
 }
 
 function logger(req, res, next){
