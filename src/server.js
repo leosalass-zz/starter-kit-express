@@ -1,8 +1,11 @@
 const express = require('express');
-const path = require('path')
+const path = require('path');
 const dotenv = require('dotenv').config();
+const passport = require('passport');
+const cookieParser = require('cookie-parser')
 const session = require('express-session');
-const validator = require('validatorjs')
+const LocalStrategy = require('passport-local').Strategy
+const validator = require('validatorjs');
 
 //Initializations
 const app = express();
@@ -14,15 +17,39 @@ app.set('App', path.join(__dirname, 'app'));
 
 //Global Middlewares
 app.use(express.urlencoded({extended: false}));
+app.use(cookieParser('123-456-789'))
 app.use(session({
-  secret: 'secret',
-  resave: true,
+  name: 'session-id',
+  secret: '123-456-789',
   saveUninitialized: true,
+  resave: true
 }));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(
+  {
+    usernameField: 'username',
+    passwordField: 'password'
+  },
+  function(username, password, done){    
+    if(username === 'admin' && password === "123456"){
+      return done(null, {id: 1, name: "Patry Rubio"})
+    }
+    done(null, false)
+  }
+));
+passport.serializeUser(function(user, done){
+  done(null, user.id)
+});
+passport.deserializeUser(function(id, done){
+  done(null, {id: 1, name: "Patry Rubio"})
+})
+
 app.use(function (req, res, next) {
   //console.log('Time:', Date.now());
   next();
 });
+
 
 //Global Variables
 global.__basedir = __dirname;
@@ -48,7 +75,8 @@ fs.readdir(routesFolder, (err, files) => {
   });
 });
 
-const { router } = require('./app/middlewares/RouteMiddleware.js')
+const { router } = require('./app/middlewares/RouteMiddleware.js');
+const User = require('./app/models/User');
 app.use(router);
 
 //Static Files
