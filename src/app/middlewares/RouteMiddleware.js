@@ -93,12 +93,14 @@ function route(httpMethod = 'get', uri, target, extra) {
   } catch (err) { }
 }
 
+//https://chunkbytes.com/2019/02/user-authentication-with-passport-express/
 function authenticate(req, res, next) {
   const key = `${req.method.toLowerCase()}${req.baseUrl}`
   try {    
     if(authenticatedRoutes[key] != undefined && authenticatedRoutes[key]){
       //console.log('áuth is true')
       passport.authenticate('local')(req, res, next, () => {
+        req.session.userId = 35
         res.send('passport test')
         next()
       });      

@@ -2,6 +2,7 @@ const User = require(`${__Models}/User`);
 var controller = {};
 
 controller.get = function(req, res){
+  console.log(req.session)
   res.send('get controller')
   return
 
