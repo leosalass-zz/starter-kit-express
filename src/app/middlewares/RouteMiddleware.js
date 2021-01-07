@@ -96,6 +96,7 @@ function route(httpMethod = 'get', uri, target, extra) {
 //https://chunkbytes.com/2019/02/user-authentication-with-passport-express/
 function authenticate(req, res, next) {
   const key = `${req.method.toLowerCase()}${req.baseUrl}`
+  console.log(authenticatedRoutes[key]);
   try {    
     if(authenticatedRoutes[key] != undefined && authenticatedRoutes[key]){
       //console.log('áuth is true')

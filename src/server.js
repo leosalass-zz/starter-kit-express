@@ -5,6 +5,7 @@ const passport = require('passport');
 const cookieParser = require('cookie-parser')
 const session = require('express-session');
 const LocalStrategy = require('passport-local').Strategy
+const BearerStrategy = require('passport-http-bearer').Strategy
 const validator = require('validatorjs');
 
 //Initializations
@@ -44,6 +45,25 @@ passport.serializeUser(function(user, done){
 passport.deserializeUser(function(id, done){
   done(null, {id: 1, name: "Patry Rubio"})
 })
+
+passport.use(new BearerStrategy(
+  {
+    token: 'usertoken'
+  },
+  function(token, done){    
+    if(token === 'ASD123..'){
+      return done(null, {id: 1, name: "Patry Rubio"})
+    }
+    done(null, false)
+  }
+  /*function(token, done) {
+    User.findOne({ token: token }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user, { scope: 'read' });
+    });
+  }*/
+));
 
 app.use(function (req, res, next) {
   //console.log('Time:', Date.now());
